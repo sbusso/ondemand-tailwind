@@ -1,0 +1,38 @@
+{
+  "sites": [
+    {
+      "name": "traderlabs",
+      "uuid": "bfcb9a68-6f0b-46a4-9b5b-cf481e988037",
+      "source": {
+        "path": "../petite-vue-starter/index.html"
+      },
+
+      "options": {
+        "url": "https://www.traderlabs.com/",
+        "selector": "div.col-md-4.col-sm-6.col-xs-12.col-lg-3.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs",
+        "selector_type": "css",
+        "dev": "locahost",
+        "purge": true,
+        "prefix": true,
+        "dependencies": ["daisyui"]
+      }
+    },
+    {
+      "name": "ondemand-tailwind",
+      "uuid": "a0e40f20-b5e8-498a-b422-8bc3d721921c",
+      "source": {
+        "path": "./public/index.html"
+      },
+
+      "options": {
+        "url": "https://www.traderlabs.com/",
+        "selector": "div.col-md-4.col-sm-6.col-xs-12.col-lg-3.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs-offset-0.col-lg-offset-0.col-md-offset-0.col-sm-offset-0.col-xs",
+        "selector_type": "css",
+        "dev": "locahost",
+        "purge": true,
+        "prefix": true,
+        "dependencies": ["daisyui"]
+      }
+    }
+  ]
+}

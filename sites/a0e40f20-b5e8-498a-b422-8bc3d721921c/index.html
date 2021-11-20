@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Petite Vue Starter</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"/>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/daisyui/1.16.2/full.min.css"/>
+  </head>
+  <body class="container p-20 mx-auto">
+
+    <div v-scope>
+      <table class="table table-striped table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>Site</th>
+            <th>Status</th>
+            <th>CSS</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(site, index) in store.sites">
+            <td>{{ site.name }}</td>
+            <td></td>
+            <td>
+              {{ site.uuid}}
+            </td>
+            <td>
+              <button
+                class="btn btn-primary"
+                @click="refreshSite(site.uuid)">
+                Refresh
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+
+    <script type="module">
+      import {createApp, reactive} from "https://unpkg.com/petite-vue?module";
+
+      const refreshSite = (uuid) => {
+        fetch(`/api/sites/${uuid}/refresh`, {method: "POST"})
+          .then(res => res.json())
+          .then(res => {
+            console.log(res);
+          })
+          .catch(err => {})
+        }
+
+      const store = reactive({sites: [], refreshSite: refreshSite});
+
+      const getData = () => {
+        fetch("http://localhost:3111/sites")
+          .then(res => res.json())
+          .then(data => {
+            console.log(data);
+            store.sites = data;
+          });
+      };
+
+      getData()
+
+      createApp({
+        // share it with app scopes
+        store
+      }).mount();
+    </script>
+  </body>
+</html>
