@@ -6,7 +6,7 @@ const fastify = require("fastify")({
 const fastifyStatic = require("fastify-static");
 const fs = require("fs");
 const path = require("path");
-
+const fetch = require("node-fetch");
 const { v4: uuidv4 } = require("uuid");
 const { spawn } = require("child_process");
 const util = require("util");
@@ -48,7 +48,42 @@ const loadSites = () => {
       setupSite(site);
     }
     fastify.log.debug(`SITE: ${site.name}`);
+
+    // if (site.source.type === "github") {
+    // }
+
+    // if (site.source.type === "local") {
+    // }
+
+    // if (site.source.type === "fly") {
+    // }
+
+    fastify.post(`/css/${site.uuid}.css`, async (request, reply) => {
+      // request.text().then((text) => {
+      console.log(util.inspect(request.body));
+      fs.writeFileSync(`./sites/${site.uuid}/index.html`, request.body);
+      compileSite(site);
+
+      const stream = fs.createReadStream(
+        path.join(__dirname, `sites/${site.uuid}/style.css`)
+      );
+      return reply.type("text/css").send(stream);
+      // });
+    });
+
     fastify.get(`/css/${site.uuid}.css`, async (request, reply) => {
+      let referrer =
+        request.raw.headers.referrer || request.raw.headers.referer || "";
+      fastify.log.debug(`REFERRER: ${referrer}`);
+      fetch(referrer).then((res) => {
+        fastify.log.debug(`RES: ${res}`);
+        if (res.status === 200) {
+          res.text().then(function (text) {
+            fs.writeFileSync(`sites/${site.uuid}/index.html`, text);
+            compileSite(site);
+          });
+        }
+      });
       const stream = fs.createReadStream(
         path.join(__dirname, `sites/${site.uuid}/style.css`)
       );
@@ -74,19 +109,7 @@ const setupSite = (site) => {
   // `
   //   );
   // add tailwind.config.js
-  fs.writeFileSync(
-    `./sites/${site.uuid}/tailwind.config.js`,
-    `module.exports = {
-  purge: ["./**/*.html"],
-  darkMode: false, // or 'media' or 'class'
-  theme: {
-    extend: {},
-  },
-  variants: {},
-  plugins: [require("daisyui")],
-  //   plugins: [require("sailui")],
-};`
-  );
+  generateConfig(site);
   importSite(site);
   // Compile site
   compileSite(site);
@@ -96,6 +119,61 @@ const importSite = (site) => {
   fastify.log.debug("IMPORT SITE", site.name);
 
   fs.cpSync(site.source.path, `./sites/${site.uuid}/index.html`);
+};
+
+const generateConfig = (site) => {
+  fastify.log.debug("GENERATE CONFIG", site.name);
+
+  let config = "module.exports = {" + "\n";
+  config += `  purge: ["./**/*.html"],` + "\n";
+  config += `  darkMode: 'media', // or 'media' or 'class'` + "\n";
+  config += `  theme: {` + "\n";
+  config += `    extend: {` + "\n";
+  config += `      colors: {` + "\n";
+  config += `        primary: '#f7287b',` + "\n";
+  config += `        secondary: '#1e88e5',` + "\n";
+  config += `        accent: '#82B1FF',` + "\n";
+  config += `        error: '#FF5252',` + "\n";
+  config += `        info: '#2196F3',` + "\n";
+  config += `        success: '#4CAF50',` + "\n";
+  config += `        warning: '#FFC107'` + "\n";
+  config += `      },` + "\n";
+  config += `      fontFamily: {` + "\n";
+  config += `        sans: [` + "\n";
+  config += `          'Roboto',` + "\n";
+  config += `          'system-ui',` + "\n";
+  config += `          '-apple-system',` + "\n";
+  config += `          'BlinkMacSystemFont',` + "\n";
+  config += `          'Segoe UI',` + "\n";
+  config += `          'Oxygen',` + "\n";
+  config += `          'Ubuntu',` + "\n";
+  config += `          'Cantarell',` + "\n";
+  config += `          'Fira Sans',` + "\n";
+  config += `          'Droid Sans',` + "\n";
+  config += `          'Helvetica Neue',` + "\n";
+  config += `          'sans-serif'` + "\n";
+  config += `        ]` + "\n";
+  config += `      }` + "\n";
+  config += `    },` + "\n";
+  config += `  },` + "\n";
+  config += `  variants: {},` + "\n";
+  config += `  plugins: [require("daisyui")],` + "\n";
+  config += `  daisyui: {` + "\n";
+  config += `      styled: true,` + "\n";
+  config += `      themes: false,` + "\n";
+  config += `      base: true,` + "\n";
+  config += `      utils: true,` + "\n";
+  config += `      logs: false,` + "\n";
+  config += `      rtl: false,` + "\n";
+  config += `    },` + "\n";
+  config += `};"`;
+
+  //   config.plugins = [require("sailui")];
+  fs.writeFileSync(`./sites/${site.uuid}/tailwind.config.js`, config);
+};
+
+const flyImport = (site) => {
+  fastify.log.debug("FLY IMPORT SITE", site.name);
 };
 
 // Refresh site API handler /api/sites/:uuid/refresh
